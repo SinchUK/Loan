@@ -25,36 +25,35 @@ export default class MiniSlider extends Slider {
     }
 
     nextSlide() {
-        if (this.slides[1].tagName == "BUTTON" && this.slides[2].tagName == "BUTTON") {
-            this.container.appendChild(this.slides[0]); //Slide
-            this.container.appendChild(this.slides[1]); //Btn
-            this.container.appendChild(this.slides[2]); //btn2
-            this.decorizeSlides();
-        } else if (this.slides[1].tagName == "BUTTON") {
-            this.container.appendChild(this.slides[0]); //Slide
-            this.container.appendChild(this.slides[1]); //Btn
-            this.decorizeSlides();
-        } else {
-            this.container.appendChild(this.slides[0]);
-            this.decorizeSlides();
+// ____________________________MY try__________________
+
+        const array = Array.from(this.slides);
+        const slidesArr = array.filter(slide => slide.classList.contains('feed__item'));
+        for (let i = 0; i < slidesArr.length; i++) {
+            if (slidesArr[i].tagName !== 'BUTTON') {
+                let active = slidesArr[i];
+                this.container.insertBefore(active,slidesArr[slidesArr.length - 1]);
+                this.decorizeSlides();
+                break;
+            } 
+        }
+    }
+
+    prevSlide() {
+        for (let i = this.slides.length - 1; i > 0; i--) {
+            if (this.slides[i].tagName !== 'BUTTON') {
+                let active = this.slides[i];
+                this.container.insertBefore(active, this.slides[0]);
+                this.decorizeSlides();
+                break;
+            }
         }
     }
 
     bindTriggers() {
         this.next.addEventListener('click', () => this.nextSlide());
 
-        this.prev.addEventListener('click', () => {
-
-            for (let i = this.slides.length - 1; i > 0; i--) {
-                if (this.slides[i].tagName !== 'BUTTON') {
-                    let active = this.slides[i];
-                    this.container.insertBefore(active, this.slides[0]);
-                    this.decorizeSlides();
-                    break;
-                }
-            }
-
-        });
+        this.prev.addEventListener('click', () => this.prevSlide());
     }
 
     init() {
