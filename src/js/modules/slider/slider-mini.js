@@ -28,7 +28,7 @@ export default class MiniSlider extends Slider {
 // ____________________________MY try__________________
 
         const array = Array.from(this.slides);
-        const slidesArr = array.filter(slide => slide.classList.contains('feed__item'));
+        const slidesArr = array.filter(slide => slide.tagName !== 'BUTTON');
         for (let i = 0; i < slidesArr.length; i++) {
             if (slidesArr[i].tagName !== 'BUTTON') {
                 let active = slidesArr[i];
@@ -50,9 +50,20 @@ export default class MiniSlider extends Slider {
         }
     }
 
+    stopAutoplay(id, next, prev) {
+        const arr = [...[next], ...[prev]];
+        arr.forEach(btn => {
+            btn.addEventListener('mouseover', () => {
+                clearInterval(id);
+            });
+            btn.addEventListener('mouseout', () => {
+                id = setInterval(() => this.nextSlide(),5000);
+            });
+        });
+    }
+
     bindTriggers() {
         this.next.addEventListener('click', () => this.nextSlide());
-
         this.prev.addEventListener('click', () => this.prevSlide());
     }
 
@@ -68,7 +79,10 @@ export default class MiniSlider extends Slider {
         this.decorizeSlides();
 
         if (this.autoplay) {
-            setInterval(() => this.nextSlide(),5000);
+            let autoSlide = 0;
+            clearInterval(autoSlide);
+            autoSlide = setInterval(() => this.nextSlide(),5000);
+            this.stopAutoplay(autoSlide, this.next, this.prev);
         }
     }
 }
