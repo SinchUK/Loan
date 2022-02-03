@@ -1,6 +1,8 @@
 import Difference from './modules/difference';
+import Download from './modules/download';
 import Form from './modules/form';
 import VideoPlayer from './modules/playVideo';
+import ShowInfo from './modules/showInfo';
 import MainSlider from './modules/slider/slider-main';
 import MiniSlider from './modules/slider/slider-mini';
 
@@ -38,10 +40,13 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     feedSlider.init();
 
-    const player = new VideoPlayer('.showup .play','.overlay');
-    player.init();
+    new VideoPlayer('.showup .play','.overlay').init();
+    new VideoPlayer('.module__video-item .play', '.overlay').init();
 
     new Difference('.officerold', '.officernew', '.officer__card-item').init();
 
     new Form('.form').init();
+
+    new ShowInfo('.plus__content').init();
+    new Download('.download').init();
 });
